@@ -45,6 +45,7 @@ jobs:
           ./pluginval.app/Contents/MacOS/pluginval --strictness-level 10 --skip-gui-tests --validate-in-process --timeout-ms 600000 --validate "build/AvelDynamic_artefacts/Release/VST3/Avel Dynamic.vst3" > pluginval.txt 2>&1
           code=$?
           echo "::notice title=pluginval macOS (exit $code)::$(grep -E 'FAIL|!!!|Error|SUCCESS|Starting tests in' pluginval.txt | tail -n 30 | sed ':a;N;$!ba;s/\n/%0A/g')"
+          echo "::notice title=pluginval macOS last lines::$(tail -n 25 pluginval.txt | sed ':a;N;$!ba;s/\n/%0A/g')"
           exit $code
 
       - name: Make installer

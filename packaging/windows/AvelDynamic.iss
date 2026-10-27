@@ -1,9 +1,9 @@
 ; Inno Setup script for Avel Dynamic (Windows, VST3).
-; Build:  iscc /DAppVersion=1.0.0 packaging\windows\AvelDynamic.iss
+; Build:  iscc /DAppVersion=1.0.1 packaging\windows\AvelDynamic.iss
 ; Expects the plugin at build\AvelDynamic_artefacts\Release\VST3\Avel Dynamic.vst3
 
 #ifndef AppVersion
-  #define AppVersion "1.0.0"
+  #define AppVersion "1.0.1"
 #endif
 
 #define Root "..\.."

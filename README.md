@@ -8,7 +8,7 @@ Avel Dynamic — компрессор в духе FabFilter Pro-C 3. В нём 8
 
 ## Установка
 
-### macOS: `AvelDynamic-1.0.0-macOS.pkg`
+### macOS: `AvelDynamic-1.0.1-macOS.pkg`
 1. Дважды кликните по файлу → Продолжить → Установить. Мак спросит пароль.
    Установщик кладёт VST3 и Audio Unit в `/Library/Audio/Plug-Ins` для всех пользователей.
 2. Если macOS пишет, что не может проверить разработчика:
@@ -16,7 +16,7 @@ Avel Dynamic — компрессор в духе FabFilter Pro-C 3. В нём 8
    - macOS 14 и старше: правый клик по файлу → **Открыть** → Открыть.
 3. Перезапустите DAW. Плагин находится в категории **Dynamics**.
 
-### Windows: `AvelDynamic-1.0.0-Windows-Setup.exe`
+### Windows: `AvelDynamic-1.0.1-Windows-Setup.exe`
 1. Запустите файл → Далее → Установить. Плагин ставится в `C:\Program Files\Common Files\VST3`.
 2. Если появится окно «Windows защитила ваш компьютер»: **Подробнее → Выполнить в любом случае**.
 3. Перезапустите DAW и пересканируйте плагины.

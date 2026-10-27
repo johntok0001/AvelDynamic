@@ -109,6 +109,12 @@ namespace avel::params
                        AudioParameterFloatAttributes().withLabel (label).withStringFromValueFunction (std::move (toStr))
                                                       .withValueFromStringFunction (std::move (fromStr))));
         };
+        // On/off switches are two-step choices: their normalised value is always exactly 0 or 1,
+        // so a host that writes 0.3 still reads back what the state restores (pluginval state test).
+        auto onOff = [&] (const char* pid, const char* name, bool def)
+        {
+            l.add (std::make_unique<AudioParameterChoice> (ParameterID { pid, 1 }, name, StringArray { "Off", "On" }, def ? 1 : 0));
+        };
         auto dbParse = [] (const String& t) { return t.retainCharacters ("-+.0123456789").getFloatValue(); };
         auto pctParse = [] (const String& t) { return t.retainCharacters ("-.0123456789").getFloatValue(); };
         auto pct = [] (float v, int) { return String (roundToInt (v)) + " %"; };
@@ -127,7 +133,7 @@ namespace avel::params
            [dbParse] (const String& t) { return t.containsIgnoreCase ("full") ? 60.0f : std::abs (dbParse (t)); });
         f (id::attack, "Attack", skewed (0.005f, 250.0f, 10.0f), 10.0f, [] (float v, int) { return formatMs (v); }, parseMs);
         f (id::release, "Release", skewed (5.0f, 2500.0f, 150.0f), 120.0f, [] (float v, int) { return formatMs (v); }, parseMs);
-        l.add (std::make_unique<AudioParameterBool> (ParameterID { id::autoRelease, 1 }, "Auto Release", false));
+        onOff (id::autoRelease, "Auto Release", false);
         f (id::hold, "Hold", skewed (0.0f, 500.0f, 50.0f), 0.0f, [] (float v, int) { return v < 0.05f ? String ("Off") : formatMs (v); }, parseMs);
         f (id::lookahead, "Lookahead", { 0.0f, 20.0f, 0.01f }, 0.0f, [] (float v, int) { return v < 0.005f ? String ("Off") : formatMs (v); }, parseMs);
         l.add (std::make_unique<AudioParameterChoice> (ParameterID { id::character, 1 }, "Character", StringArray { "Off", "Warm", "Bright" }, 0));
@@ -136,13 +142,13 @@ namespace avel::params
         l.add (std::make_unique<AudioParameterChoice> (ParameterID { id::channelMode, 1 }, "Channels", StringArray { "Stereo", "M/S", "Mid", "Side" }, 0));
         f (id::scHpf, "SC High-pass", skewed (20.0f, 2000.0f, 200.0f), 20.0f, [] (float v, int) { return v <= 20.5f ? String ("Off") : formatHz (v); }, parseHz);
         f (id::scLpf, "SC Low-pass", skewed (1000.0f, 20000.0f, 6000.0f), 20000.0f, [] (float v, int) { return v >= 19950.0f ? String ("Off") : formatHz (v); }, parseHz);
-        l.add (std::make_unique<AudioParameterBool> (ParameterID { id::scExternal, 1 }, "External Sidechain", false));
-        l.add (std::make_unique<AudioParameterBool> (ParameterID { id::scListen, 1 }, "Sidechain Listen", false));
+        onOff (id::scExternal, "External Sidechain", false);
+        onOff (id::scListen, "Sidechain Listen", false);
         l.add (std::make_unique<AudioParameterChoice> (ParameterID { id::oversampling, 1 }, "Oversampling", StringArray { "Off", "2x", "4x" }, 0));
         f (id::input, "Input", { -24.0f, 24.0f, 0.01f }, 0.0f, [] (float v, int) { return formatDb (v); }, dbParse);
         f (id::output, "Output", { -24.0f, 24.0f, 0.01f }, 0.0f, [] (float v, int) { return formatDb (v); }, dbParse);
         f (id::mix, "Mix", { 0.0f, 100.0f, 0.1f }, 100.0f, pct, pctParse);
-        l.add (std::make_unique<AudioParameterBool> (ParameterID { id::autoGain, 1 }, "Auto Gain", false));
+        onOff (id::autoGain, "Auto Gain", false);
         return l;
     }
 }
